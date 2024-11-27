@@ -15,20 +15,29 @@ class Db
     $this->didDb = new LeafDb();
     $this->didDb->connect('', getenv('DID_DATABASE'), '', '', 'sqlite');
     // db()->connect(['dbtype' => 'sqlite', 'dbname' => '../instance-nodejs/did.db']);
-    return $this->readerDb->query("CREATE TABLE IF NOT EXISTS contents (
+    $this->readerDb->query("CREATE TABLE IF NOT EXISTS contents (
       url TEXT PRIMARY KEY,
       content TEXT NOT NULL,
       scraped_at INTEGER NOT NULL
     );")->execute();
+    $this->readerDb->query("CREATE TABLE IF NOT EXISTS users (
+      domain TEXT PRIMARY KEY,
+      favicon BLOB NULL,
+      scraped_at INTEGER NOT NULL
+    );")->execute();
+    return;
   }
 
   public function getPosts()
   {
     return $this->didDb->query(
-      "SELECT p1.*, blocks.*, (SELECT COUNT(path) FROM posts p2 where p2.path = p1.path) as total FROM posts p1
+        "SELECT p1.path, (SELECT COUNT(path) FROM posts p2 where p2.path = p1.path) as total,
+	MIN (blocks.time) as time,
+	MIN (p1.inserted_at) as inserted_at
+        FROM posts p1
         LEFT JOIN blocks ON p1.block = blocks.hash
-        WHERE p1.path LIKE p1.domain || '%' 
-        ORDER BY blocks.time DESC, p1.inserted_at DESC LIMIT 500"
+	GROUP BY p1.path
+        ORDER BY time DESC, inserted_at DESC LIMIT 500"
       )->fetchAll();
   }
 
@@ -42,5 +51,19 @@ class Db
   public function getPostContent($url)
   {
     return $this->readerDb->query("SELECT * FROM contents WHERE url = ?")->bind($url)->fetchAssoc();
+  }
+
+  public function getAvatarByDomain(string $domain)
+  {
+    $result = $this->readerDb->query("SELECT favicon FROM users WHERE domain = ?")->bind($domain)->fetchAssoc();
+    return $result;
+  }
+
+  public function saveAvatarForDomain(string $domain, string $avatarData): bool
+  {
+    return $this->readerDb
+      ->insert("users")
+      ->params(["domain" => $domain, "favicon" => $avatarData, "scraped_at" => time() * 1000])->execute();
+    return true;
   }
 }
