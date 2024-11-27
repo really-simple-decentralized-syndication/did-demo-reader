@@ -21,17 +21,19 @@
         <p class="message">{!! convertUrlsToLinks($message) !!}</p>
         @endforeach
         <div class="interactions">
-          <span class="retweets">
-            <span class="retweet-icon">🔁</span>
-            <span class="retweet-count">{{$post['total']}}</span>
-          </span>
-          <!-- <span class="comments">
-            <span class="comment-icon">💬</span>
-            <span class="comment-count">12</span>
-          </span> -->
-          <span class="post-link">
-            <a href="{{$post['url']}}" class="post-link-icon"  target="_blank">🔗</a>
-          </span>
+	  <div style="display:flex">
+		  <span class="retweets">
+		    <span class="retweet-icon">🔁</span>
+		    <span class="retweet-count">{{$post['total']}}</span>
+		  </span>
+		  <!-- <span class="comments">
+		    <span class="comment-icon">💬</span>
+		    <span class="comment-count">12</span>
+		  </span> -->
+		  <span class="post-link">
+		    <a href="{{$post['url']}}" class="post-link-icon"  target="_blank">🔗</a>
+		  </span>
+	  </div>
           <span class="post-time">
             <span class="post-time-text">{{ \Carbon\Carbon::parse($post['time'])->format('Y-m-d H:i:s') }}</span>
           </span>
