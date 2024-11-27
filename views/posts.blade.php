@@ -16,7 +16,7 @@
         <img src="/avatar/?value={{$post['owner']}}" alt="User Avatar">
       </div>
       <div class="content">
-        <h3 class="username">{{$post['owner']}}</h3>
+        <a href="http://{{$post['owner']}}" target="_blank" style="text-decoration:none"><h3 class="username">{{$post['owner']}}</h3></a>
         @foreach ($post['content'] as $message)
         <p class="message">{!! convertUrlsToLinks($message) !!}</p>
         @endforeach
