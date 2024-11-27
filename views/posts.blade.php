@@ -34,7 +34,6 @@
           </span>
           <span class="post-time">
             <span class="post-time-text">{{$post['time']}}</span>
-            <span class="post-time-icon">🕒</span>
           </span>
         </div>
       </div>
