@@ -10,6 +10,9 @@
 
 <body>
   <div class="container">
+    <div style="margin-bottom: 15px;text-align: right;">
+	<a href="https://writer.did-1.com" target="_blank" style="color:#1da1f2;">Submit new post</a>
+    </div>
     @foreach ($posts as $post)
     <div class="post">
       <div class="avatar">
