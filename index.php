@@ -115,6 +115,13 @@ app()->get('/avatar', function () {
   $icon->displayImage('png');
 });
 
+app()->get('/rawindex', function () {
+  global $blade;
+  $db = new App\Db();
+  $posts = $db->getPostsRaw();
+  echo $blade->make('rawindex', ['posts' => $posts])->render();
+});
+
 app()->get('/posts', function () {
   global $blade;
   $db = new App\Db();

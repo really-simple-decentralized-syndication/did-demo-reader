@@ -27,6 +27,12 @@ class Db
     );")->execute();
     return;
   }
+ 
+  public function getPostsRaw()
+  {
+    return $this->didDb->query(
+        "SELECT * from posts order by inserted_at DESC")->fetchAll();
+  }
 
   public function getPosts()
   {
